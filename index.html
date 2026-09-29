@@ -1,0 +1,1686 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SPLDV - Metode Grafik | Matematika Kelas 9</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --primary: #14b8a6;
+    --primary-dark: #0d9488;
+    --secondary: #8b5cf6;
+    --secondary-dark: #7c3aed;
+    --accent: #f59e0b;
+    --danger: #ef4444;
+    --success: #22c55e;
+    --bg: #f8fafc;
+    --text: #1e293b;
+    --muted: #64748b;
+    --card: #ffffff;
+    --border: #e2e8f0;
+  }
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  #progressBar {
+    position: fixed; top: 0; left: 0;
+    height: 5px; width: 0%;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    z-index: 9999;
+    transition: width 0.2s;
+  }
+
+  header {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    color: white;
+    padding: 60px 20px 80px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+    animation: rotate 20s linear infinite;
+  }
+  @keyframes rotate { from{transform:rotate(0)} to{transform:rotate(360deg)} }
+  header h1 {
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 800;
+    margin-bottom: 10px;
+    position: relative;
+    z-index: 1;
+  }
+  header .subtitle {
+    font-size: clamp(0.95rem, 2vw, 1.15rem);
+    opacity: 0.95;
+    position: relative; z-index: 1;
+  }
+  header .meta {
+    margin-top: 20px;
+    display: inline-flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(10px);
+    padding: 12px 24px;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    position: relative; z-index: 1;
+  }
+  header .meta i { margin-right: 6px; }
+
+  nav {
+    position: sticky;
+    top: 0;
+    background: white;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    z-index: 1000;
+    padding: 12px 20px;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  nav a {
+    text-decoration: none;
+    color: var(--muted);
+    font-size: 0.85rem;
+    font-weight: 500;
+    padding: 8px 14px;
+    border-radius: 20px;
+    transition: all 0.2s;
+    display: inline-block;
+  }
+  nav a:hover, nav a.active {
+    background: var(--primary);
+    color: white;
+  }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  section {
+    padding: 50px 0 30px;
+    scroll-margin-top: 70px;
+  }
+  .section-title {
+    font-size: clamp(1.4rem, 3vw, 1.9rem);
+    font-weight: 700;
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--text);
+  }
+  .section-title .icon-box {
+    width: 48px; height: 48px;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.3rem;
+    flex-shrink: 0;
+  }
+
+  .card {
+    background: var(--card);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    border: 1px solid var(--border);
+    margin-bottom: 20px;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+  }
+
+  .tujuan-list { list-style: none; }
+  .tujuan-list li {
+    display: flex;
+    gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px dashed var(--border);
+    align-items: flex-start;
+  }
+  .tujuan-list li:last-child { border-bottom: none; }
+  .tujuan-list .check {
+    width: 28px; height: 28px;
+    background: var(--success);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .story-box {
+    background: linear-gradient(135deg, #fef3c7, #fde68a);
+    border-left: 5px solid var(--accent);
+    padding: 20px 24px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+  }
+  .story-box h3 { color: #92400e; margin-bottom: 8px; }
+  .story-box p { color: #78350f; }
+
+  .question-box {
+    background: #ede9fe;
+    border-left: 5px solid var(--secondary);
+    padding: 18px 24px;
+    border-radius: 12px;
+    color: #5b21b6;
+    font-style: italic;
+  }
+
+  h3.sub {
+    font-size: 1.15rem;
+    color: var(--primary-dark);
+    margin: 25px 0 12px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .formula {
+    background: #f0fdfa;
+    border: 2px dashed var(--primary);
+    padding: 16px 24px;
+    border-radius: 12px;
+    text-align: center;
+    font-family: 'Courier New', monospace;
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--primary-dark);
+    margin: 15px 0;
+    overflow-x: auto;
+  }
+
+  .solusi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin: 20px 0;
+  }
+  .solusi-card {
+    background: white;
+    border-radius: 12px;
+    padding: 18px;
+    text-align: center;
+    border: 2px solid var(--border);
+    transition: all 0.3s;
+  }
+  .solusi-card:hover { border-color: var(--primary); transform: translateY(-4px); }
+  .solusi-card .num {
+    width: 36px; height: 36px;
+    background: var(--primary);
+    color: white;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center; justify-content: center;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .solusi-card h4 { color: var(--primary-dark); margin-bottom: 6px; font-size: 1rem;}
+  .solusi-card p { font-size: 0.88rem; color: var(--muted); }
+
+  .steps { list-style: none; counter-reset: step; }
+  .steps li {
+    counter-increment: step;
+    position: relative;
+    padding: 14px 14px 14px 60px;
+    background: #f1f5f9;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    font-size: 0.95rem;
+  }
+  .steps li::before {
+    content: counter(step);
+    position: absolute;
+    left: 14px; top: 50%;
+    transform: translateY(-50%);
+    width: 32px; height: 32px;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center; justify-content: center;
+    font-weight: 700;
+    font-size: 0.9rem;
+  }
+
+  table {
+    border-collapse: collapse;
+    margin: 12px auto;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  }
+  th, td {
+    border: 1px solid var(--border);
+    padding: 10px 20px;
+    text-align: center;
+    font-weight: 600;
+  }
+  th { background: var(--primary); color: white; }
+
+  .contoh-box {
+    background: #ecfeff;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 15px 0;
+    border: 1px solid #a5f3fc;
+  }
+
+  /* GRAFIK VISUAL */
+  .grafik-container {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 16px 0;
+    border: 2px solid var(--primary);
+    text-align: center;
+    overflow-x: auto;
+  }
+  .grafik-title {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--primary-dark);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .grafik-svg {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+  }
+  .grafik-legend {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .legend-color {
+    width: 20px;
+    height: 4px;
+    border-radius: 2px;
+    display: inline-block;
+  }
+  .legend-line1 { background: #3b82f6; }
+  .legend-line2 { background: #f97316; }
+  .legend-point { 
+    width: 12px; height: 12px; 
+    background: #ef4444; 
+    border-radius: 50%; 
+    border: 2px solid white;
+    box-shadow: 0 0 0 2px #ef4444;
+  }
+
+  .manfaat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+  }
+  .manfaat-card {
+    background: white;
+    border-radius: 14px;
+    padding: 20px;
+    border: 1px solid var(--border);
+    transition: all 0.3s;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .manfaat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(20,184,166,0.15);
+    border-color: var(--primary);
+  }
+  .manfaat-icon {
+    font-size: 2rem;
+    flex-shrink: 0;
+  }
+  .manfaat-card h4 {
+    font-size: 1rem;
+    color: var(--primary-dark);
+    margin-bottom: 6px;
+  }
+  .manfaat-card p {
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  .rangkuman-box {
+    background: linear-gradient(135deg, #f0fdfa 0%, #ede9fe 100%);
+    border-radius: 16px;
+    padding: 28px;
+    border: 2px solid var(--primary);
+  }
+  .rangkuman-box ul { list-style: none; }
+  .rangkuman-box li {
+    padding: 12px 0 12px 36px;
+    position: relative;
+    font-size: 0.95rem;
+    border-bottom: 1px dashed rgba(20,184,166,0.3);
+  }
+  .rangkuman-box li:last-child { border-bottom: none; }
+  .rangkuman-box li::before {
+    content: '📌';
+    position: absolute;
+    left: 0;
+    top: 12px;
+  }
+
+  .soal-card {
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 22px;
+    border: 1px solid var(--border);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+  }
+  .soal-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+  }
+  .soal-num {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+    padding: 6px 14px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 0.85rem;
+  }
+  .level-badge {
+    font-size: 0.75rem;
+    padding: 4px 12px;
+    border-radius: 50px;
+    font-weight: 600;
+  }
+  .level-easy { background: #dcfce7; color: #166534; }
+  .level-mid { background: #fef3c7; color: #92400e; }
+  .level-hard { background: #fee2e2; color: #991b1b; }
+
+  .soal-text {
+    font-size: 1rem;
+    margin-bottom: 14px;
+    line-height: 1.9;
+  }
+  .soal-text .eq {
+    display: inline-block;
+    background: #f1f5f9;
+    padding: 2px 12px;
+    border-radius: 6px;
+    font-family: 'Courier New', monospace;
+    font-weight: 700;
+    color: var(--primary-dark);
+    margin: 3px 4px;
+  }
+
+  .answer-area {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin: 14px 0;
+    padding: 14px;
+    background: #f8fafc;
+    border-radius: 10px;
+  }
+  .answer-area label {
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+  .answer-area input {
+    width: 80px;
+    padding: 8px 12px;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.95rem;
+    text-align: center;
+    font-weight: 600;
+    transition: border 0.2s;
+  }
+  .answer-area input:focus {
+    outline: none;
+    border-color: var(--primary);
+  }
+
+  .btn {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: white;
+    border: none;
+    padding: 10px 22px;
+    border-radius: 50px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-right: 8px;
+  }
+  .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(20,184,166,0.35); }
+  .btn-outline {
+    background: white;
+    color: var(--primary-dark);
+    border: 2px solid var(--primary);
+  }
+  .btn-outline:hover { background: var(--primary); color: white; }
+  .btn-secondary {
+    background: linear-gradient(135deg, var(--secondary), var(--secondary-dark));
+  }
+  .btn-secondary:hover { box-shadow: 0 6px 16px rgba(139,92,246,0.35); }
+
+  .feedback {
+    margin-top: 12px;
+    padding: 14px 18px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    display: none;
+    animation: fadeIn 0.4s;
+  }
+  .feedback.correct {
+    background: #dcfce7;
+    border-left: 4px solid var(--success);
+    color: #166534;
+  }
+  .feedback.wrong {
+    background: #fee2e2;
+    border-left: 4px solid var(--danger);
+    color: #991b1b;
+  }
+  .feedback.show { display: block; }
+
+  .pembahasan {
+    margin-top: 12px;
+    padding: 16px 20px;
+    background: #eff6ff;
+    border-left: 4px solid #3b82f6;
+    border-radius: 10px;
+    font-size: 0.88rem;
+    color: #1e3a8a;
+    display: none;
+    line-height: 1.8;
+  }
+  .pembahasan.show { display: block; animation: fadeIn 0.4s; }
+  .pembahasan h5 { margin-bottom: 8px; color: #1e40af; }
+  .pembahasan .eq {
+    display: inline-block;
+    background: #dbeafe;
+    padding: 2px 10px;
+    border-radius: 6px;
+    font-family: 'Courier New', monospace;
+    font-weight: 700;
+    margin: 2px 3px;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* UPLOAD GAMBAR */
+  .upload-area {
+    margin: 14px 0;
+    padding: 16px;
+    background: #f0fdfa;
+    border: 2px dashed var(--primary);
+    border-radius: 12px;
+    text-align: center;
+    transition: all 0.3s;
+    cursor: pointer;
+  }
+  .upload-area:hover {
+    background: #ccfbf1;
+    border-color: var(--primary-dark);
+  }
+  .upload-area label {
+    display: inline-block;
+    cursor: pointer;
+    color: var(--primary-dark);
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+  .upload-area label i { margin-right: 6px; }
+  .upload-area input[type="file"] { display: none; }
+  .upload-hint {
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin-top: 6px;
+    font-style: italic;
+  }
+
+  .preview-container {
+    margin-top: 14px;
+    display: none;
+    position: relative;
+  }
+  .preview-container.show {
+    display: block;
+    animation: fadeIn 0.4s;
+  }
+  .preview-container img {
+    max-width: 100%;
+    max-height: 400px;
+    border-radius: 10px;
+    border: 2px solid var(--primary);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    display: block;
+    margin: 0 auto;
+  }
+  .preview-label {
+    text-align: center;
+    font-size: 0.82rem;
+    color: var(--success);
+    font-weight: 600;
+    margin-top: 8px;
+  }
+  .btn-remove-img {
+    display: block;
+    margin: 10px auto 0;
+    background: #fee2e2;
+    color: #991b1b;
+    border: none;
+    padding: 6px 16px;
+    border-radius: 50px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-remove-img:hover { background: #fecaca; }
+
+  .score-box {
+    background: linear-gradient(135deg, var(--secondary), var(--primary));
+    color: white;
+    padding: 30px;
+    border-radius: 16px;
+    text-align: center;
+    margin: 30px 0;
+  }
+  .score-box h3 { font-size: 1.3rem; margin-bottom: 8px; }
+  .score-box .score-num {
+    font-size: 3rem;
+    font-weight: 800;
+    line-height: 1;
+    margin: 10px 0;
+  }
+  .score-box p { opacity: 0.95; font-size: 0.95rem;}
+
+  .refleksi textarea {
+    width: 100%;
+    min-height: 100px;
+    padding: 14px;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.9rem;
+    resize: vertical;
+  }
+  .refleksi textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+  }
+  .checklist {
+    list-style: none;
+    margin-top: 16px;
+  }
+  .checklist li {
+    padding: 10px 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    font-size: 0.92rem;
+  }
+  .checklist input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    accent-color: var(--primary);
+    cursor: pointer;
+  }
+
+  footer {
+    background: #1e293b;
+    color: #cbd5e1;
+    text-align: center;
+    padding: 30px 20px;
+    margin-top: 40px;
+    font-size: 0.85rem;
+  }
+  footer .heart { color: #ef4444; }
+
+  .fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.6s ease;
+  }
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (max-width: 640px) {
+    header { padding: 40px 16px 60px; }
+    section { padding: 35px 0 20px; }
+    .card { padding: 18px; }
+    nav ul { justify-content: flex-start; }
+    .answer-area { flex-direction: column; align-items: flex-start; }
+    .answer-area input { width: 100%; }
+    th, td { padding: 8px 12px; font-size: 0.85rem; }
+  }
+
+  @media print {
+    nav, #progressBar, .btn, .btn-outline, .btn-secondary, footer, iframe { display: none !important; }
+    header { background: white !important; color: black !important; }
+    body { background: white; }
+    .card, .soal-card { box-shadow: none; border: 1px solid #ccc; page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div id="progressBar"></div>
+
+<header>
+  <h1>📐 SPLDV - Metode Grafik</h1>
+  <p class="subtitle">Matematika Kelas 9 • Pembelajaran Daring Mandiri</p>
+  <div class="meta">
+    <span><i class="fas fa-user-tie"></i> Zulfa Dianti, S.Pd., M.Pd., Gr.</span>
+    <span><i class="fas fa-calendar-alt"></i> Selasa, 29 September 2026</span>
+    <span><i class="fas fa-clock"></i> Kondisional</span>
+  </div>
+</header>
+
+<nav>
+  <ul>
+    <li><a href="#tujuan">🎯 Tujuan</a></li>
+    <li><a href="#apersepsi">💡 Apersepsi</a></li>
+    <li><a href="#materi">📖 Materi</a></li>
+    <li><a href="#manfaat">🌍 Manfaat</a></li>
+    <li><a href="#rangkuman">📋 Rangkuman</a></li>
+    <li><a href="#latihan">✏️ Latihan</a></li>
+    <li><a href="#pengumpulan">📤 Pengumpulan</a></li>
+    <li><a href="#refleksi">🪞 Refleksi</a></li>
+  </ul>
+</nav>
+
+<div class="container">
+
+  <!-- TUJUAN -->
+  <section id="tujuan" class="fade-in">
+    <h2 class="section-title">
+      <span class="icon-box"><i class="fas fa-bullseye"></i></span>
+      Tujuan Pembelajaran
+    </h2>
+    <div class="card">
+      <ul class="tujuan-list">
+        <li>
+          <span class="check"><i class="fas fa-check"></i></span>
+          <span>Siswa dapat <b>menjelaskan pengertian SPLDV</b> dan konsep penyelesaiannya dengan metode grafik.</span>
+        </li>
+        <li>
+          <span class="check"><i class="fas fa-check"></i></span>
+          <span>Siswa dapat <b>menentukan titik potong dua garis</b> sebagai solusi SPLDV.</span>
+        </li>
+        <li>
+          <span class="check"><i class="fas fa-check"></i></span>
+          <span>Siswa dapat <b>menggambar grafik</b> dari persamaan linear dua variabel pada bidang kartesius.</span>
+        </li>
+        <li>
+          <span class="check"><i class="fas fa-check"></i></span>
+          <span>Siswa dapat <b>menyelesaikan masalah kontekstual</b> sehari-hari menggunakan metode grafik.</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- APERSEPSI -->
+  <section id="apersepsi" class="fade-in">
+    <h2 class="section-title">
+      <span class="icon-box"><i class="fas fa-lightbulb"></i></span>
+      Apersepsi
+    </h2>
+    <div class="story-box">
+      <h3>🛒 Cerita Pemantik</h3>
+      <p>Bayangkan kamu dan temanmu pergi ke kantin. Kamu membeli <b>2 roti dan 1 susu</b> seharga <b>Rp13.000</b>. Temanmu membeli <b>1 roti dan 2 susu</b> seharga <b>Rp14.000</b>. Berapa harga satu roti dan satu susu?</p>
+    </div>
+    <div class="question-box">
+      <b>💭 Pertanyaan Pemantik:</b><br>
+      Pernahkah kamu melihat dua garis berpotongan di buku matematika? Menurutmu, apa arti dari titik potong kedua garis tersebut? 🤔
+    </div>
+  </section>
+
+  <!-- MATERI -->
+  <section id="materi" class="fade-in">
+    <h2 class="section-title">
+      <span class="icon-box"><i class="fas fa-book-open"></i></span>
+      Materi Pembelajaran
+    </h2>
+
+    <div class="card">
+      <h3 class="sub">🅰️ Pengertian SPLDV</h3>
+      <p><b>SPLDV</b> (Sistem Persamaan Linear Dua Variabel) adalah dua persamaan linear yang memiliki <b>dua variabel yang sama</b>.</p>
+      <div class="formula">
+        ax + by = c &nbsp;&nbsp;dan&nbsp;&nbsp; px + qy = r
+      </div>
+      <p style="font-size:0.9rem; color: var(--muted);">dengan a, b, p, q ≠ 0 dan x, y adalah variabel.</p>
+    </div>
+
+    <div class="card">
+      <h3 class="sub">🅱️ Konsep Metode Grafik</h3>
+      <p>SPLDV dapat diselesaikan dengan <b>menggambar kedua garis</b> pada bidang kartesius. Solusi SPLDV adalah <b>titik potong kedua garis</b> (x, y).</p>
+
+      <h3 class="sub" style="font-size:1rem;">Kemungkinan Solusi SPLDV:</h3>
+      <div class="solusi-grid">
+        <div class="solusi-card">
+          <div class="num">1</div>
+          <h4>Berpotongan</h4>
+          <p>Memiliki <b>1 solusi</b> (konsisten)</p>
+        </div>
+        <div class="solusi-card">
+          <div class="num">2</div>
+          <h4>Sejajar</h4>
+          <p><b>Tidak memiliki solusi</b> (inkonsisten)</p>
+        </div>
+        <div class="solusi-card">
+          <div class="num">3</div>
+          <h4>Berimpit</h4>
+          <p>Memiliki <b>tak hingga solusi</b> (dependen)</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 class="sub">🅲 Langkah-Langkah Metode Grafik</h3>
+      <ol class="steps">
+        <li>Ubah kedua persamaan ke bentuk <b>y = mx + c</b> (eksplisit).</li>
+        <li>Tentukan minimal <b>2 titik</b> untuk masing-masing persamaan (gunakan tabel bantu).</li>
+        <li><b>Gambar kedua garis</b> pada bidang kartesius.</li>
+        <li>Tentukan <b>titik potong</b> kedua garis.</li>
+        <li><b>Periksa solusi</b> dengan substitusi ke kedua persamaan.</li>
+      </ol>
+    </div>
+
+    <div class="card">
+      <h3 class="sub">🅳 Contoh Soal Step-by-Step</h3>
+      <div class="contoh-box">
+        <p><b>Soal:</b></p>
+        <p style="margin: 8px 0;"><span class="eq">x + y = 5</span> ... (1)</p>
+        <p style="margin: 8px 0;"><span class="eq">2x - y = 4</span> ... (2)</p>
+
+        <p style="margin-top:16px;"><b>Langkah 1:</b> Ubah ke bentuk y = mx + c</p>
+        <p>(1) → <span class="eq">y = 5 - x</span> &nbsp; (garis biru)</p>
+        <p>(2) → <span class="eq">y = 2x - 4</span> &nbsp; (garis oranye)</p>
+
+        <p style="margin-top:16px;"><b>Langkah 2:</b> Buat tabel bantu</p>
+
+        <p style="margin-top:10px; font-weight:600;">Persamaan (1): y = 5 - x</p>
+        <table>
+          <tr><th>x</th><td>0</td><td>5</td></tr>
+          <tr><th>y</th><td>5</td><td>0</td></tr>
+        </table>
+
+        <p style="margin-top:10px; font-weight:600;">Persamaan (2): y = 2x - 4</p>
+        <table>
+          <tr><th>x</th><td>0</td><td>2</td></tr>
+          <tr><th>y</th><td>-4</td><td>0</td></tr>
+        </table>
+
+        <p style="margin-top:16px;"><b>Langkah 3:</b> Gambar kedua garis pada bidang kartesius</p>
+        <p style="font-size:0.88rem; color:var(--muted); margin-bottom:10px;">
+          Plot titik-titik dari tabel di atas, lalu hubungkan menjadi garis lurus. Perhatikan kedua garis berpotongan!
+        </p>
+
+        <!-- GRAFIK VISUAL -->
+        <div class="grafik-container">
+          <div class="grafik-title">
+            <i class="fas fa-chart-line"></i> Grafik SPLDV: x + y = 5 dan 2x - y = 4
+          </div>
+          <svg class="grafik-svg" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+            <!-- Background -->
+            <rect x="0" y="0" width="400" height="400" fill="#ffffff"/>
+
+            <!-- Grid -->
+            <defs>
+              <pattern id="smallGrid" width="40" height="40" patternUnits="userSpaceOnUse">
+                <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#f1f5f9" stroke-width="1"/>
+              </pattern>
+              <pattern id="grid" width="80" height="80" patternUnits="userSpaceOnUse">
+                <rect width="80" height="80" fill="url(#smallGrid)"/>
+                <path d="M 80 0 L 0 0 0 80" fill="none" stroke="#cbd5e1" stroke-width="1"/>
+              </pattern>
+            </defs>
+            <rect x="40" y="20" width="320" height="320" fill="url(#grid)" />
+
+            <!-- Sumbu X dan Y -->
+            <line x1="40" y1="300" x2="380" y2="300" stroke="#1e293b" stroke-width="2"/>
+            <line x1="200" y1="20" x2="200" y2="360" stroke="#1e293b" stroke-width="2"/>
+            <!-- Panah sumbu -->
+            <polygon points="380,300 372,296 372,304" fill="#1e293b"/>
+            <polygon points="200,20 196,28 204,28" fill="#1e293b"/>
+
+            <!-- Label sumbu -->
+            <text x="385" y="305" font-size="14" font-weight="bold" fill="#1e293b">x</text>
+            <text x="205" y="18" font-size="14" font-weight="bold" fill="#1e293b">y</text>
+            <text x="195" y="318" font-size="11" font-weight="bold" fill="#1e293b" text-anchor="end">O</text>
+
+            <!-- Angka pada sumbu X -->
+            <text x="120" y="318" font-size="10" fill="#64748b" text-anchor="middle">-2</text>
+            <text x="160" y="318" font-size="10" fill="#64748b" text-anchor="middle">-1</text>
+            <text x="240" y="318" font-size="10" fill="#64748b" text-anchor="middle">1</text>
+            <text x="280" y="318" font-size="10" fill="#64748b" text-anchor="middle">2</text>
+            <text x="320" y="318" font-size="10" fill="#64748b" text-anchor="middle">3</text>
+            <text x="360" y="318" font-size="10" fill="#64748b" text-anchor="middle">4</text>
+
+            <!-- Angka pada sumbu Y -->
+            <text x="190" y="260" font-size="10" fill="#64748b" text-anchor="end">1</text>
+            <text x="190" y="220" font-size="10" fill="#64748b" text-anchor="end">2</text>
+            <text x="190" y="180" font-size="10" fill="#64748b" text-anchor="end">3</text>
+            <text x="190" y="140" font-size="10" fill="#64748b" text-anchor="end">4</text>
+            <text x="190" y="100" font-size="10" fill="#64748b" text-anchor="end">5</text>
+            <text x="190" y="340" font-size="10" fill="#64748b" text-anchor="end">-1</text>
+
+            <!-- Garis 1: y = 5 - x  (biru) -->
+            <!-- Titik (0,5) -> (200, 100), Titik (5,0) -> (400, 300) -->
+            <!-- Gunakan sebagian: (0,5)=(200,100) s/d (4,1)=(360,260) -->
+            <line x1="120" y1="60" x2="400" y2="340" stroke="#3b82f6" stroke-width="2.5" stroke-linecap="round"/>
+            <!-- Label garis 1 -->
+            <text x="130" y="70" font-size="11" font-weight="bold" fill="#3b82f6">y = 5 - x</text>
+
+            <!-- Garis 2: y = 2x - 4  (oranye) -->
+            <!-- Titik (0,-4)=(200,460) offscreen, (2,0)=(280,300), (3,2)=(320,220), (4,4)=(360,140) -->
+            <line x1="200" y1="460" x2="360" y2="140" stroke="#f97316" stroke-width="2.5" stroke-linecap="round"/>
+            <!-- Label garis 2 -->
+            <text x="330" y="155" font-size="11" font-weight="bold" fill="#f97316">y = 2x - 4</text>
+
+            <!-- Titik-titik bantu (dari tabel) -->
+            <!-- Persamaan 1: (0,5)=(200,100), (5,0)=(400,300) -->
+            <circle cx="200" cy="100" r="4" fill="#3b82f6" stroke="white" stroke-width="2"/>
+            <circle cx="400" cy="300" r="4" fill="#3b82f6" stroke="white" stroke-width="2"/>
+            <text x="200" y="92" font-size="9" fill="#1e40af" text-anchor="middle" font-weight="bold">(0,5)</text>
+
+            <!-- Persamaan 2: (2,0)=(280,300), (3,2)=(320,220) -->
+            <circle cx="280" cy="300" r="4" fill="#f97316" stroke="white" stroke-width="2"/>
+            <circle cx="320" cy="220" r="4" fill="#f97316" stroke="white" stroke-width="2"/>
+            <text x="280" y="293" font-size="9" fill="#c2410c" text-anchor="middle" font-weight="bold">(2,0)</text>
+
+            <!-- Titik Potong: (3,2) = (320, 220) -->
+            <circle cx="320" cy="220" r="7" fill="#ef4444" stroke="white" stroke-width="3"/>
+            <!-- Garis putus-putus ke sumbu -->
+            <line x1="320" y1="220" x2="320" y2="300" stroke="#ef4444" stroke-width="1" stroke-dasharray="4,4"/>
+            <line x1="320" y1="220" x2="200" y2="220" stroke="#ef4444" stroke-width="1" stroke-dasharray="4,4"/>
+            <!-- Label titik potong -->
+            <text x="325" y="205" font-size="11" font-weight="bold" fill="#ef4444">Titik Potong</text>
+            <text x="325" y="216" font-size="12" font-weight="bold" fill="#ef4444">(3, 2)</text>
+          </svg>
+
+          <div class="grafik-legend">
+            <div class="legend-item">
+              <span class="legend-color legend-line1"></span>
+              <span>y = 5 - x</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-color legend-line2"></span>
+              <span>y = 2x - 4</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-point"></span>
+              <span>Titik Potong (3, 2)</span>
+            </div>
+          </div>
+        </div>
+
+        <p style="margin-top:16px;"><b>Langkah 4:</b> Verifikasi solusi</p>
+        <p>Substitusi (3, 2) ke persamaan (1): 3 + 2 = 5 ✓</p>
+        <p>Substitusi (3, 2) ke persamaan (2): 2(3) - 2 = 4 ✓</p>
+
+        <p style="margin-top:16px; padding:10px; background:#dcfce7; border-radius:8px; text-align:center; font-weight:700; color:#166534;">
+          Jadi, HP = {(3, 2)} ✅
+        </p>
+      </div>
+    </div>
+
+    <!-- CONTOH TAMBAHAN: TIGA KEMUNGKINAN -->
+    <div class="card">
+      <h3 class="sub">🅴 Visualisasi Tiga Kemungkinan Solusi</h3>
+      <p style="font-size:0.9rem; color:var(--muted); margin-bottom:14px;">Perhatikan tiga kemungkinan posisi dua garis pada bidang kartesius:</p>
+
+      <div class="solusi-grid">
+        <!-- Berpotongan -->
+        <div class="solusi-card" style="padding:12px;">
+          <h4 style="color:#3b82f6;">Berpotongan</h4>
+          <svg viewBox="0 0 200 200" style="width:100%; max-width:200px;">
+            <rect x="20" y="20" width="160" height="160" fill="#f8fafc" stroke="#e2e8f0"/>
+            <line x1="20" y1="100" x2="180" y2="100" stroke="#94a3b8" stroke-width="1"/>
+            <line x1="100" y1="20" x2="100" y2="180" stroke="#94a3b8" stroke-width="1"/>
+            <line x1="40" y1="40" x2="160" y2="160" stroke="#3b82f6" stroke-width="2.5"/>
+            <line x1="40" y1="160" x2="160" y2="40" stroke="#f97316" stroke-width="2.5"/>
+            <circle cx="100" cy="100" r="6" fill="#ef4444" stroke="white" stroke-width="2"/>
+          </svg>
+          <p style="margin-top:8px;">1 solusi ✓</p>
+        </div>
+
+        <!-- Sejajar -->
+        <div class="solusi-card" style="padding:12px;">
+          <h4 style="color:#ef4444;">Sejajar</h4>
+          <svg viewBox="0 0 200 200" style="width:100%; max-width:200px;">
+            <rect x="20" y="20" width="160" height="160" fill="#f8fafc" stroke="#e2e8f0"/>
+            <line x1="20" y1="100" x2="180" y2="100" stroke="#94a3b8" stroke-width="1"/>
+            <line x1="100" y1="20" x2="100" y2="180" stroke="#94a3b8" stroke-width="1"/>
+            <line x1="40" y1="140" x2="160" y2="60" stroke="#3b82f6" stroke-width="2.5"/>
+            <line x1="40" y1="100" x2="160" y2="20" stroke="#f97316" stroke-width="2.5"/>
+          </svg>
+          <p style="margin-top:8px;">Tidak ada solusi ✗</p>
+        </div>
+
+        <!-- Berimpit -->
+        <div class="solusi-card" style="padding:12px;">
+          <h4 style="color:#8b5cf6;">Berimpit</h4>
+          <svg viewBox="0 0 200 200" style="width:100%; max-width:200px;">
+            <rect x="20" y="20" width="160" height="160" fill="#f8fafc" stroke="#e2e8f0"/>
+            <line x1="20" y1="100" x2="180" y2="100" stroke="#94a3b8" stroke-width="1"/>
+            <line x1="100" y1="20" x2="100" y2="180" stroke="#94a3b8" stroke-width="1"/>
+            <line x1="40" y1="140" x2="160" y2="60" stroke="#3b82f6" stroke-width="3"/>
+            <line x1="40" y1="140" x2="160" y2="60" stroke="#f97316" stroke-width="2" stroke-dasharray="6,4"/>
+          </svg>
+          <p style="margin-top:8px;">Tak hingga solusi ∞</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MANFAAT -->
+  <section id="manfaat" class="fade-in">
+    <h2 class="section-title">
+      <span class="icon-box"><i class="fas fa-globe"></i></span>
+      Pemanfaatan dalam Kehidupan Sehari-hari
+    </h2>
+    <div class="manfaat-grid">
+      <div class="manfaat-card">
+        <div class="manfaat-icon">🛒</div>
+        <div>
+          <h4>Belanja</h4>
+          <p>Menentukan harga satuan barang ketika hanya diketahui total harga beberapa kombinasi belanja.</p>
+        </div>
+      </div>
+      <div class="manfaat-card">
+        <div class="manfaat-icon">💰</div>
+        <div>
+          <h4>Keuangan</h4>
+          <p>Menghitung jumlah uang koin dan kertas berdasarkan total nilai dan jumlah benda.</p>
+        </div>
+      </div>
+      <div class="manfaat-card">
+        <div class="manfaat-icon">🚗</div>
+        <div>
+          <h4>Transportasi</h4>
+          <p>Menentukan waktu dan jarak pertemuan dua kendaraan yang bergerak berlawanan arah.</p>
+        </div>
+      </div>
+      <div class="manfaat-card">
+        <div class="manfaat-icon">📱</div>
+        <div>
+          <h4>Tarif Layanan</h4>
+          <p>Membandingkan dua paket internet/telepon untuk menentukan mana yang lebih murah.</p>
+        </div>
+      </div>
+      <div class="manfaat-card">
+        <div class="manfaat-icon">🏃</div>
+        <div>
+          <h4>Olahraga</h4>
+          <p>Menentukan kecepatan dua pelari berdasarkan total waktu dan jarak tempuh.</p>
+        </div>
+      </div>
+      <div class="manfaat-card">
+        <div class="manfaat-icon">🎫</div>
+        <div>
+          <h4>Tiket Acara</h4>
+          <p>Menentukan harga tiket dewasa dan anak-anak dari total penjualan tiket.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RANGKUMAN -->
+  <section id="rangkuman" class="fade-in">
+    <h2 class="section-title">
+      <span class="icon-box"><i class="fas fa-clipboard-list"></i></span>
+      Rangkuman
+    </h2>
+    <div class="rangkuman-box">
+      <ul>
+        <li><b>SPLDV</b> adalah dua persamaan linear dengan dua variabel yang sama.</li>
+        <li><b>Metode grafik</b> menyelesaikan SPLDV dengan menggambar kedua garis pada bidang kartesius.</li>
+        <li>Solusi SPLDV = <b>titik potong kedua garis</b> (x, y).</li>
+        <li>Langkah: ubah ke <b>y = mx + c</b> → buat tabel titik → gambar grafik → tentukan titik potong → verifikasi.</li>
+        <li>Tiga kemungkinan solusi: <b>berpotongan</b> (1 solusi), <b>sejajar</b> (tidak ada solusi), <b>berimpit</b> (tak hingga solusi).</li>
+        <li>Metode grafik sangat berguna untuk <b>visualisasi masalah nyata</b>.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- LATIHAN -->
+  <section id="latihan" class="fade-in">
+    <h2 class="section-title">
+      <span class="icon-box"><i class="fas fa-pen"></i></span>
+      Latihan Soal
+    </h2>
+
+    <div class="card" style="background:#eff6ff; border-left:4px solid #3b82f6; padding:16px 20px; margin-bottom:20px;">
+      <p style="font-size:0.9rem; color:#1e3a8a; margin:0; line-height:1.8;">
+        <b><i class="fas fa-info-circle"></i> Petunjuk Pengerjaan:</b><br>
+        1️⃣ Kerjakan setiap soal dengan metode grafik di <b>buku tulis</b>.<br>
+        2️⃣ Isi nilai <b>x</b> dan <b>y</b> di kolom jawaban, lalu klik <b>"Periksa Jawaban"</b>.<br>
+        3️⃣ <b>Foto grafik</b> jawabanmu dan upload di kotak upload pada masing-masing soal.<br>
+        4️⃣ Setelah semua selesai, scroll ke bagian <b>"Pengumpulan Tugas"</b> untuk mengirim.
+      </p>
+    </div>
+
+    <!-- SOAL 1 -->
+    <div class="soal-card">
+      <div class="soal-header">
+        <span class="soal-num">Soal 1</span>
+        <span class="level-badge level-easy">Mudah</span>
+      </div>
+      <p class="soal-text">
+        Tentukan himpunan penyelesaian SPLDV berikut dengan metode grafik:<br>
+        <span class="eq">x + y = 4</span><br>
+        <span class="eq">x - y = 2</span>
+      </p>
+      <div class="answer-area">
+        <label>x =</label>
+        <input type="number" step="any" id="s1x" placeholder="x">
+        <label>y =</label>
+        <input type="number" step="any" id="s1y" placeholder="y">
+        <button class="btn" onclick="checkAnswer(1, 3, 1)">
+          <i class="fas fa-check"></i> Periksa Jawaban
+        </button>
+        <button class="btn btn-outline" onclick="togglePembahasan(1)">
+          <i class="fas fa-eye"></i> Lihat Pembahasan
+        </button>
+      </div>
+
+      <div class="upload-area" onclick="document.getElementById('upload1').click()">
+        <label for="upload1">
+          <i class="fas fa-cloud-upload-alt"></i> Upload Foto Grafik Jawabanmu
+        </label>
+        <input type="file" id="upload1" accept="image/*" onchange="previewImage(event, 1)">
+        <p class="upload-hint">📷 Format: JPG/PNG • Maks. 5 MB • Foto dari buku tulis</p>
+      </div>
+      <div class="preview-container" id="preview1">
+        <img id="previewImg1" src="" alt="Preview Grafik Soal 1">
+        <p class="preview-label">✅ Gambar berhasil diupload!</p>
+        <button class="btn-remove-img" onclick="removeImage(1)">
+          <i class="fas fa-trash"></i> Hapus Gambar
+        </button>
+      </div>
+
+      <div class="feedback" id="fb1"></div>
+      <div class="pembahasan" id="pb1">
+        <h5>📝 Pembahasan Soal 1</h5>
+        <p><b>Langkah 1:</b> Ubah ke bentuk y = mx + c</p>
+        <p><span class="eq">x + y = 4</span> → <span class="eq">y = 4 - x</span></p>
+        <p><span class="eq">x - y = 2</span> → <span class="eq">y = x - 2</span></p>
+        <p style="margin-top:10px;"><b>Langkah 2:</b> Buat tabel bantu</p>
+        <p><b>y = 4 - x:</b> jika x=0 → y=4; jika x=4 → y=0</p>
+        <p><b>y = x - 2:</b> jika x=0 → y=-2; jika x=2 → y=0</p>
+        <p style="margin-top:10px;"><b>Langkah 3:</b> Kedua garis berpotongan di titik <b>(3, 1)</b>.</p>
+        <p style="margin-top:10px;"><b>Langkah 4:</b> Verifikasi</p>
+        <p>3 + 1 = 4 ✓ &nbsp; dan &nbsp; 3 - 1 = 2 ✓</p>
+        <p style="margin-top:10px; padding:8px; background:#dcfce7; border-radius:8px; text-align:center; font-weight:700; color:#166534;">
+          Jadi, HP = {(3, 1)}
+        </p>
+      </div>
+    </div>
+
+    <!-- SOAL 2 -->
+    <div class="soal-card">
+      <div class="soal-header">
+        <span class="soal-num">Soal 2</span>
+        <span class="level-badge level-easy">Mudah</span>
+      </div>
+      <p class="soal-text">
+        Tentukan himpunan penyelesaian SPLDV berikut dengan metode grafik:<br>
+        <span class="eq">2x + y = 6</span><br>
+        <span class="eq">x - y = 3</span>
+      </p>
+      <div class="answer-area">
+        <label>x =</label>
+        <input type="number" step="any" id="s2x" placeholder="x">
+        <label>y =</label>
+        <input type="number" step="any" id="s2y" placeholder="y">
+        <button class="btn" onclick="checkAnswer(2, 3, 0)">
+          <i class="fas fa-check"></i> Periksa Jawaban
+        </button>
+        <button class="btn btn-outline" onclick="togglePembahasan(2)">
+          <i class="fas fa-eye"></i> Lihat Pembahasan
+        </button>
+      </div>
+
+      <div class="upload-area" onclick="document.getElementById('upload2').click()">
+        <label for="upload2">
+          <i class="fas fa-cloud-upload-alt"></i> Upload Foto Grafik Jawabanmu
+        </label>
+        <input type="file" id="upload2" accept="image/*" onchange="previewImage(event, 2)">
+        <p class="upload-hint">📷 Format: JPG/PNG • Maks. 5 MB • Foto dari buku tulis</p>
+      </div>
+      <div class="preview-container" id="preview2">
+        <img id="previewImg2" src="" alt="Preview Grafik Soal 2">
+        <p class="preview-label">✅ Gambar berhasil diupload!</p>
+        <button class="btn-remove-img" onclick="removeImage(2)">
+          <i class="fas fa-trash"></i> Hapus Gambar
+        </button>
+      </div>
+
+      <div class="feedback" id="fb2"></div>
+      <div class="pembahasan" id="pb2">
+        <h5>📝 Pembahasan Soal 2</h5>
+        <p><b>Langkah 1:</b> Ubah ke bentuk y = mx + c</p>
+        <p><span class="eq">2x + y = 6</span> → <span class="eq">y = 6 - 2x</span></p>
+        <p><span class="eq">x - y = 3</span> → <span class="eq">y = x - 3</span></p>
+        <p style="margin-top:10px;"><b>Langkah 2:</b> Buat tabel bantu</p>
+        <p><b>y = 6 - 2x:</b> jika x=0 → y=6; jika x=3 → y=0</p>
+        <p><b>y = x - 3:</b> jika x=0 → y=-3; jika x=3 → y=0</p>
+        <p style="margin-top:10px;"><b>Langkah 3:</b> Kedua garis berpotongan di titik <b>(3, 0)</b>.</p>
+        <p style="margin-top:10px;"><b>Langkah 4:</b> Verifikasi</p>
+        <p>2(3) + 0 = 6 ✓ &nbsp; dan &nbsp; 3 - 0 = 3 ✓</p>
+        <p style="margin-top:10px; padding:8px; background:#dcfce7; border-radius:8px; text-align:center; font-weight:700; color:#166534;">
+          Jadi, HP = {(3, 0)}
+        </p>
+      </div>
+    </div>
+
+    <!-- SOAL 3 -->
+    <div class="soal-card">
+      <div class="soal-header">
+        <span class="soal-num">Soal 3</span>
+        <span class="level-badge level-mid">Sedang</span>
+      </div>
+      <p class="soal-text">
+        Tentukan himpunan penyelesaian SPLDV berikut dengan metode grafik:<br>
+        <span class="eq">x + 2y = 8</span><br>
+        <span class="eq">3x - y = 3</span>
+      </p>
+      <div class="answer-area">
+        <label>x =</label>
+        <input type="number" step="any" id="s3x" placeholder="x">
+        <label>y =</label>
+        <input type="number" step="any" id="s3y" placeholder="y">
+        <button class="btn" onclick="checkAnswer(3, 2, 3)">
+          <i class="fas fa-check"></i> Periksa Jawaban
+        </button>
+        <button class="btn btn-outline" onclick="togglePembahasan(3)">
+          <i class="fas fa-eye"></i> Lihat Pembahasan
+        </button>
+      </div>
+
+      <div class="upload-area" onclick="document.getElementById('upload3').click()">
+        <label for="upload3">
+          <i class="fas fa-cloud-upload-alt"></i> Upload Foto Grafik Jawabanmu
+        </label>
+        <input type="file" id="upload3" accept="image/*" onchange="previewImage(event, 3)">
+        <p class="upload-hint">📷 Format: JPG/PNG • Maks. 5 MB • Foto dari buku tulis</p>
+      </div>
+      <div class="preview-container" id="preview3">
+        <img id="previewImg3" src="" alt="Preview Grafik Soal 3">
+        <p class="preview-label">✅ Gambar berhasil diupload!</p>
+        <button class="btn-remove-img" onclick="removeImage(3)">
+          <i class="fas fa-trash"></i> Hapus Gambar
+        </button>
+      </div>
+
+      <div class="feedback" id="fb3"></div>
+      <div class="pembahasan" id="pb3">
+        <h5>📝 Pembahasan Soal 3</h5>
+        <p><b>Langkah 1:</b> Ubah ke bentuk y = mx + c</p>
+        <p><span class="eq">x + 2y = 8</span> → <span class="eq">y = (8 - x)/2 = 4 - ½x</span></p>
+        <p><span class="eq">3x - y = 3</span> → <span class="eq">y = 3x - 3</span></p>
+        <p style="margin-top:10px;"><b>Langkah 2:</b> Buat tabel bantu</p>
+        <p><b>y = 4 - ½x:</b> jika x=0 → y=4; jika x=8 → y=0</p>
+        <p><b>y = 3x - 3:</b> jika x=0 → y=-3; jika x=1 → y=0</p>
+        <p style="margin-top:10px;"><b>Langkah 3:</b> Kedua garis berpotongan di titik <b>(2, 3)</b>.</p>
+        <p style="margin-top:10px;"><b>Langkah 4:</b> Verifikasi</p>
+        <p>2 + 2(3) = 8 ✓ &nbsp; dan &nbsp; 3(2) - 3 = 3 ✓</p>
+        <p style="margin-top:10px; padding:8px; background:#dcfce7; border-radius:8px; text-align:center; font-weight:700; color:#166534;">
+          Jadi, HP = {(2, 3)}
+        </p>
+      </div>
+    </div>
+
+    <!-- SOAL 4 -->
+    <div class="soal-card">
+      <div class="soal-header">
+        <span class="soal-num">Soal 4</span>
+        <span class="level-badge level-mid">Sedang - Kontekstual</span>
+      </div>
+      <p class="soal-text">
+        Harga <b>2 buku dan 1 pensil</b> adalah <b>Rp9.000</b>. Harga <b>1 buku dan 2 pensil</b> adalah <b>Rp8.000</b>. Tentukan harga sebuah buku dan sebuah pensil menggunakan metode grafik!<br>
+        <small style="color:var(--muted);">(Misal: x = harga buku, y = harga pensil, dalam ribuan rupiah)</small>
+      </p>
+      <div class="answer-area">
+        <label>x (buku) =</label>
+        <input type="number" step="any" id="s4x" placeholder="x">
+        <label>y (pensil) =</label>
+        <input type="number" step="any" id="s4y" placeholder="y">
+        <button class="btn" onclick="checkAnswer(4, 3.333, 2.333)">
+          <i class="fas fa-check"></i> Periksa Jawaban
+        </button>
+        <button class="btn btn-outline" onclick="togglePembahasan(4)">
+          <i class="fas fa-eye"></i> Lihat Pembahasan
+        </button>
+      </div>
+
+      <div class="upload-area" onclick="document.getElementById('upload4').click()">
+        <label for="upload4">
+          <i class="fas fa-cloud-upload-alt"></i> Upload Foto Grafik Jawabanmu
+        </label>
+        <input type="file" id="upload4" accept="image/*" onchange="previewImage(event, 4)">
+        <p class="upload-hint">📷 Format: JPG/PNG • Maks. 5 MB • Foto dari buku tulis</p>
+      </div>
+      <div class="preview-container" id="preview4">
+        <img id="previewImg4" src="" alt="Preview Grafik Soal 4">
+        <p class="preview-label">✅ Gambar berhasil diupload!</p>
+        <button class="btn-remove-img" onclick="removeImage(4)">
+          <i class="fas fa-trash"></i> Hapus Gambar
+        </button>
+      </div>
+
+      <div class="feedback" id="fb4"></div>
+      <div class="pembahasan" id="pb4">
+        <h5>📝 Pembahasan Soal 4</h5>
+        <p><b>Model matematika:</b> Misal x = harga buku (ribuan), y = harga pensil (ribuan)</p>
+        <p><span class="eq">2x + y = 9</span> ... (1)</p>
+        <p><span class="eq">x + 2y = 8</span> ... (2)</p>
+        <p style="margin-top:10px;"><b>Langkah 1:</b> Ubah ke bentuk y = mx + c</p>
+        <p>(1) → <span class="eq">y = 9 - 2x</span></p>
+        <p>(2) → <span class="eq">y = (8 - x)/2 = 4 - ½x</span></p>
+        <p style="margin-top:10px;"><b>Langkah 2:</b> Buat tabel bantu</p>
+        <p><b>y = 9 - 2x:</b> jika x=0 → y=9; jika x=4,5 → y=0</p>
+        <p><b>y = 4 - ½x:</b> jika x=0 → y=4; jika x=8 → y=0</p>
+        <p style="margin-top:10px;"><b>Langkah 3:</b> Kedua garis berpotongan di sekitar titik <b>(3⅓, 2⅓)</b> yaitu <b>(3,33 , 2,33)</b>.</p>
+        <p style="margin-top:10px;"><b>Langkah 4:</b> Verifikasi</p>
+        <p>2(3,33) + 2,33 = 6,66 + 2,33 = 8,99 ≈ 9 ✓</p>
+        <p>3,33 + 2(2,33) = 3,33 + 4,66 = 7,99 ≈ 8 ✓</p>
+        <p style="margin-top:10px; padding:8px; background:#dcfce7; border-radius:8px; text-align:center; font-weight:700; color:#166534;">
+          Jadi, harga buku ≈ Rp3.333 dan harga pensil ≈ Rp2.333
+        </p>
+        <p style="font-size:0.82rem; color:var(--muted); margin-top:8px;">💡 Catatan: Jawaban desimal dibulatkan. Bisa juga dinyatakan dalam pecahan (10/3, 7/3).</p>
+      </div>
+    </div>
+
+    <!-- SOAL 5 -->
+    <div class="soal-card">
+      <div class="soal-header">
+        <span class="soal-num">Soal 5</span>
+        <span class="level-badge level-hard">Sulit - Kontekstual</span>
+      </div>
+      <p class="soal-text">
+        Jumlah dua bilangan adalah <b>20</b>. Selisih kedua bilangan tersebut adalah <b>6</b>. Tentukan kedua bilangan tersebut menggunakan metode grafik!<br>
+        <small style="color:var(--muted);">(Misal: x dan y adalah kedua bilangan tersebut)</small>
+      </p>
+      <div class="answer-area">
+        <label>x =</label>
+        <input type="number" step="any" id="s5x" placeholder="x">
+        <label>y =</label>
+        <input type="number" step="any" id="s5y" placeholder="y">
+        <button class="btn" onclick="checkAnswer(5, 13, 7)">
+          <i class="fas fa-check"></i> Periksa Jawaban
+        </button>
+        <button class="btn btn-outline" onclick="togglePembahasan(5)">
+          <i class="fas fa-eye"></i> Lihat Pembahasan
+        </button>
+      </div>
+
+      <div class="upload-area" onclick="document.getElementById('upload5').click()">
+        <label for="upload5">
+          <i class="fas fa-cloud-upload-alt"></i> Upload Foto Grafik Jawabanmu
+        </label>
+        <input type="file" id="upload5" accept="image/*" onchange="previewImage(event, 5)">
+        <p class="upload-hint">📷 Format: JPG/PNG • Maks. 5 MB • Foto dari buku tulis</p>
+      </div>
+      <div class="preview-container" id="preview5">
+        <img id="previewImg5" src="" alt="Preview Grafik Soal 5">
+        <p class="preview-label">✅ Gambar berhasil diupload!</p>
+        <button class="btn-remove-img" onclick="removeImage(5)">
+          <i class="fas fa-trash"></i> Hapus Gambar
+        </button>
+      </div>
+
+      <div class="feedback" id="fb5"></div>
+      <div class="pembahasan" id="pb5">
+        <h5>📝 Pembahasan Soal 5</h5>
+        <p><b>Model matematika:</b> Misal kedua bilangan adalah x dan y (x > y)</p>
+        <p><span class="eq">x + y = 20</span> ... (1)</p>
+        <p><span class="eq">x - y = 6</span> ... (2)</p>
+        <p style="margin-top:10px;"><b>Langkah 1:</b> Ubah ke bentuk y = mx + c</p>
+        <p>(1) → <span class="eq">y = 20 - x</span></p>
+        <p>(2) → <span class="eq">y = x - 6</span></p>
+        <p style="margin-top:10px;"><b>Langkah 2:</b> Buat tabel bantu</p>
+        <p><b>y = 20 - x:</b> jika x=0 → y=20; jika x=20 → y=0</p>
+        <p><b>y = x - 6:</b> jika x=0 → y=-6; jika x=6 → y=0</p>
+        <p style="margin-top:10px;"><b>Langkah 3:</b> Kedua garis berpotongan di titik <b>(13, 7)</b>.</p>
+        <p style="margin-top:10px;"><b>Langkah 4:</b> Verifikasi</p>
+        <p>13 + 7 = 20 ✓ &nbsp; dan &nbsp; 13 - 7 = 6 ✓</p>
+        <p style="margin-top:10px; padding:8px; background:#dcfce7; border-radius:8px; text-align:center; font-weight:700; color:#166534;">
+          Jadi, kedua bilangan tersebut adalah 13 dan 7
+        </p>
+      </div>
+    </div>
+
+    <!-- SCORE BOX -->
+    <div class="score-box">
+      <h3>🏆 Skor Latihan Kamu</h3>
+      <div class="score-num" id="scoreDisplay">0 / 5</div>
+      <p id="scoreMessage">Ayo kerjakan semua soal untuk melihat skormu!</p>
+      <button class="btn btn-secondary" style="margin-top:14px;" onclick="resetLatihan()">
+        <i class="fas fa-redo"></i> Ulangi Latihan
+      </button>
+    </div>
+  </section>
+
+  <!-- PENGUMPULAN TUGAS -->
+  <section id="pengumpulan" class="fade-in">
+    <h2 class="section-title">
+      <span class="icon-box"><i class="fas fa-upload"></i></span>
+      Pengumpulan Tugas Grafik
+    </h2>
+
+    <div class="card" style="background:#eff6ff; border-left:4px solid #3b82f6; padding:16px 20px; margin-bottom:20px;">
+      <p style="font-size:0.92rem; color:#1e3a8a; margin:0; line-height:1.9;">
+        <b><i class="fas fa-info-circle"></i> Petunjuk Pengumpulan:</b><br>
+        1️⃣ Pastikan kamu sudah menggambar grafik untuk <b>5 soal latihan</b> di buku tulis.<br>
+        2️⃣ Foto grafik dengan HP (pastikan terang, jelas, dan tidak blur).<br>
+        3️⃣ Isi form di bawah: <b>Nama, Kelas, dan upload 5 foto grafik</b>.<br>
+        4️⃣ Klik <b>Submit</b> — selesai! ✅
+      </p>
+    </div>
+
+    <div class="card" style="padding:0; overflow:hidden; background:white;">
+      <iframe
+        data-tally-src="https://tally.so/embed/0QNBQj?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1"
+        loading="lazy"
+        width="100%"
+        height="900"
+        frameborder="0"
+        marginheight="0"
+        marginwidth="0"
+        title="Pengumpulan Grafik SPLDV"
+        style="display:block; border:none; border-radius:12px; min-height:900px;">
+      </iframe>
+    </div>
+
+    <div class="card" style="background:#fef3c7; border-left:4px solid #f59e0b; padding:14px 20px; margin-top:16px;">
+      <p style="font-size:0.88rem; color:#78350f; margin:0; line-height:1.7;">
+        <b>💡 Jika form tidak muncul di halaman ini:</b><br>
+        Buka langsung di tab baru: 
+        <a href="https://tally.so/r/0QNBQj" target="_blank" style="color:#92400e; font-weight:700; text-decoration:underline;">
+          🔗 Klik di sini untuk membuka form
+        </a>
+      </p>
+    </div>
+  </section>
+
+  <!-- REFLEKSI -->
+  <section id="refleksi" class="fade-in">
+    <h2 class="section-title">
+      <span class="icon-box"><i class="fas fa-mirror"></i></span>
+      Refleksi & Penutup
+    </h2>
+
+    <div class="card refleksi">
+      <h3 class="sub">🪞 Refleksi Diri</h3>
+      <p style="margin-bottom:12px;">Tuliskan apa yang sudah kamu pahami dan apa yang masih sulit hari ini:</p>
+      <textarea placeholder="Contoh: Saya sudah memahami cara mengubah persamaan ke bentuk y = mx + c, tetapi masih bingung saat menentukan titik potong pada grafik..."></textarea>
+    </div>
+
+    <div class="card">
+      <h3 class="sub">✅ Checklist Penguasaan Materi</h3>
+      <p style="margin-bottom:10px; color: var(--muted); font-size:0.9rem;">Centang poin yang sudah kamu kuasai:</p>
+      <ul class="checklist">
+        <li><input type="checkbox"> Saya dapat menjelaskan pengertian SPLDV</li>
+        <li><input type="checkbox"> Saya dapat mengubah persamaan ke bentuk y = mx + c</li>
+        <li><input type="checkbox"> Saya dapat membuat tabel bantu untuk menentukan titik</li>
+        <li><input type="checkbox"> Saya dapat menggambar grafik pada bidang kartesius</li>
+        <li><input type="checkbox"> Saya dapat menentukan titik potong dua garis</li>
+        <li><input type="checkbox"> Saya dapat menyelesaikan masalah kontekstual dengan metode grafik</li>
+      </ul>
+    </div>
+
+    <div class="card" style="background: linear-gradient(135deg, #fef3c7, #fde68a); border:none;">
+      <h3 style="color:#92400e; margin-bottom:10px;">🌟 Motivasi Penutup</h3>
+      <p style="color:#78350f; font-size:0.95rem;">
+        "Matematika bukan tentang angka, tetapi tentang cara berpikir. Setiap grafik yang kamu gambar adalah langkah kecil menuju pemahaman yang lebih besar. Teruslah berlatih, karena kamu lebih hebat dari yang kamu kira!" 💪
+      </p>
+      <p style="margin-top:14px; color:#92400e; font-size:0.88rem;">
+        <i class="fas fa-comment-dots"></i> Jika ada pertanyaan, silakan tulis di kolom komentar/forum kelas ya!
+      </p>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  <p>© 2026 Pembelajaran Daring Matematika Kelas 9 — SPLDV Metode Grafik</p>
+  <p style="margin-top:8px;">Dibuat oleh <b>Zulfa Dianti, S.Pd., M.Pd., Gr.</b> dengan <span class="heart">❤</span> untuk pembelajaran yang menyenangkan</p>
+</footer>
+
+<!-- Script Tally untuk dynamic height -->
+<script async src="https://tally.so/widgets/embed.js"></script>
+
+<script>
+  // Progress Bar
+  window.addEventListener('scroll', () => {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = (scrollTop / docHeight) * 100;
+    document.getElementById('progressBar').style.width = progress + '%';
+  });
+
+  // Fade in on scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  // Active nav
+  const sections = document.querySelectorAll('section');
+  const navLinks = document.querySelectorAll('nav a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(section => {
+      const sectionTop = section.offsetTop - 100;
+      if (scrollY >= sectionTop) current = section.getAttribute('id');
+    });
+    navLinks.forEach(link => {
+      link.classList.remove('active');
+      if (link.getAttribute('href') === '#' + current) link.classList.add('active');
+    });
+  });
+
+  // Jawaban benar
+  const correctAnswers = {
+    1: { x: 3, y: 1 },
+    2: { x: 3, y: 0 },
+    3: { x: 2, y: 3 },
+    4: { x: 3.333, y: 2.333 },
+    5: { x: 13, y: 7 }
+  };
+
+  const answeredStatus = { 1: null, 2: null, 3: null, 4: null, 5: null };
+
+  function isCloseEnough(val, target) {
+    return Math.abs(val - target) < 0.1;
+  }
+
+  function checkAnswer(num, correctX, correctY) {
+    const inputX = parseFloat(document.getElementById('s' + num + 'x').value);
+    const inputY = parseFloat(document.getElementById('s' + num + 'y').value);
+    const fb = document.getElementById('fb' + num);
+
+    if (isNaN(inputX) || isNaN(inputY)) {
+      fb.className = 'feedback wrong show';
+      fb.innerHTML = '⚠️ <b>Mohon isi kedua nilai x dan y terlebih dahulu!</b>';
+      return;
+    }
+
+    const isCorrect = isCloseEnough(inputX, correctX) && isCloseEnough(inputY, correctY);
+
+    if (isCorrect) {
+      fb.className = 'feedback correct show';
+      fb.innerHTML = '✅ <b>Benar!</b> Jawabanmu tepat. HP = {(' + correctX + ', ' + correctY + ')}';
+      if (answeredStatus[num] !== true) {
+        answeredStatus[num] = true;
+      }
+    } else {
+      fb.className = 'feedback wrong show';
+      fb.innerHTML = '❌ <b>Belum tepat.</b> Coba periksa kembali perhitunganmu. Tips: pastikan kamu sudah mengubah persamaan ke bentuk y = mx + c dengan benar.';
+      if (answeredStatus[num] !== true) {
+        answeredStatus[num] = false;
+      }
+    }
+
+    updateScore();
+  }
+
+  function togglePembahasan(num) {
+    const pb = document.getElementById('pb' + num);
+    pb.classList.toggle('show');
+  }
+
+  function updateScore() {
+    let score = 0;
+    let answered = 0;
+    for (let i = 1; i <= 5; i++) {
+      if (answeredStatus[i] === true) score++;
+      if (answeredStatus[i] !== null) answered++;
+    }
+    document.getElementById('scoreDisplay').textContent = score + ' / 5';
+
+    const msg = document.getElementById('scoreMessage');
+    if (answered === 0) {
+      msg.textContent = 'Ayo kerjakan semua soal untuk melihat skormu!';
+    } else if (score === 5) {
+      msg.textContent = '🎉 Luar biasa! Semua jawaban benar. Kamu hebat!';
+    } else if (score >= 3) {
+      msg.textContent = '👍 Bagus! Teruskan, sedikit lagi menuju sempurna!';
+    } else if (score >= 1) {
+      msg.textContent = '💪 Jangan menyerah! Pelajari kembali pembahasannya ya.';
+    } else {
+      msg.textContent = '📖 Coba baca kembali materi dan pembahasan contoh soal.';
+    }
+  }
+
+  function resetLatihan() {
+    for (let i = 1; i <= 5; i++) {
+      document.getElementById('s' + i + 'x').value = '';
+      document.getElementById('s' + i + 'y').value = '';
+      document.getElementById('fb' + i).className = 'feedback';
+      document.getElementById('fb' + i).innerHTML = '';
+      document.getElementById('pb' + i).classList.remove('show');
+      answeredStatus[i] = null;
+    }
+    updateScore();
+    document.getElementById('latihan').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  // Preview & Hapus Gambar
+  function previewImage(event, num) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    if (file.size > 5 * 1024 * 1024) {
+      alert('⚠️ Ukuran gambar terlalu besar! Maksimal 5 MB.');
+      event.target.value = '';
+      return;
+    }
+
+    if (!file.type.startsWith('image/')) {
+      alert('⚠️ File harus berupa gambar (JPG/PNG).');
+      event.target.value = '';
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      document.getElementById('previewImg' + num).src = e.target.result;
+      document.getElementById('preview' + num).classList.add('show');
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function removeImage(num) {
+    document.getElementById('previewImg' + num).src = '';
+    document.getElementById('preview' + num).classList.remove('show');
+    document.getElementById('upload' + num).value = '';
+  }
+
+  // Enter key untuk submit
+  for (let i = 1; i <= 5; i++) {
+    ['x', 'y'].forEach(axis => {
+      const el = document.getElementById('s' + i + axis);
+      if (el) {
+        el.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter') {
+            const correct = correctAnswers[i];
+            checkAnswer(i, correct.x, correct.y);
+          }
+        });
+      }
+    });
+  }
+</script>
+
+</body>
+</html>
